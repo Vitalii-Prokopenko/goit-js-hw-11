@@ -1,0 +1,30 @@
+/* FORM STYLES */
+.search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  background-color: #d291bc;
+
+  & input {
+    height: 40px;
+    border: 1px solid gray;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 40px;
+  height: 40px;
+
+  background-color: lightGray;
+  border: 1px solid gray;
+}
