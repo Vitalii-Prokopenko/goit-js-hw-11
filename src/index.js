@@ -27,17 +27,11 @@ const searchParams = new URLSearchParams({
 
 let searchUrl = '';
 let currentPage = 1;
+let numberOfPages = 0;
+let arrayOfImages = {};
 
 export { searchParams };
 export { currentPage };
-
-// Function expression to handle click on load more button
-
-const handleLoadMore = () => {
-  searchUrl = `${BASE_URL}?${searchParams}`;
-  console.log(searchUrl);
-  fetchImages(searchUrl);
-};
 
 // Function expression to handle submit user query
 
@@ -48,16 +42,52 @@ const handleSubmit = event => {
     elements: { searchQuery },
   } = event.currentTarget;
 
+  btnLoadMore.setAttribute('hidden', '');
   gallery.innerHTML = '';
 
+  currentPage = 1;
   searchParams.set('q', searchQuery.value);
+  searchParams.set('page', currentPage);
 
   searchUrl = `${BASE_URL}?${searchParams}`;
   console.log(searchUrl);
-  fetchImages(searchUrl);
+
+  const getFirstPageOfImages = () => axios.get(searchUrl);
+
+  getFirstPageOfImages()
+    .then(({ data }) => {
+      console.log(data);
+      const numberOfImages = data.totalHits;
+      numberOfPages = Math.ceil(numberOfImages / 40);
+      console.log(numberOfImages);
+      console.log(numberOfPages);
+      arrayOfImages = data.hits;
+      fetchImages(numberOfPages, arrayOfImages);
+    })
+    .catch(console.warn);
+};
+
+// Function expression to handle click on load more button
+
+const handleLoadMore = () => {
+  currentPage += 1;
+  searchParams.set('page', currentPage);
+
+  searchUrl = `${BASE_URL}?${searchParams}`;
+  console.log(searchUrl);
+
+  const getNextPageOfImages = () => axios.get(searchUrl);
+  getNextPageOfImages()
+    .then(({ data }) => {
+      console.log(data);
+
+      arrayOfImages = data.hits;
+      fetchImages(numberOfPages, arrayOfImages);
+    })
+    .catch(console.warn);
 };
 
 form.addEventListener('submit', handleSubmit);
-btnLoadMore.addEventListener('click', handleLoadMore);
 
-// export { currentPage };
+console.log(currentPage);
+btnLoadMore.addEventListener('click', handleLoadMore);

@@ -23,7 +23,7 @@ const markupImageCard = images => {
         </div>
       </div>`;
   });
-  gallery.insertAdjacentHTML('afterbegin', markup);
+  gallery.insertAdjacentHTML('beforeend', markup);
 };
 
 export { markupImageCard };
