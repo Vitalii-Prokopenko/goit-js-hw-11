@@ -8,14 +8,6 @@ const refs = {
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '30578820-1c894d3db344c99ef40fa5cf7';
 
-const fetchOptions = {
-  key: API_KEY,
-  q: '',
-  image_type: 'photo',
-  orientation: 'horizontal',
-  safesearch: true,
-};
-
 // Function expression to handle submit user query
 
 const handleSubmit = event => {
@@ -26,11 +18,21 @@ const handleSubmit = event => {
   } = event.currentTarget;
 
   console.log(searchQuery.value);
-  fetchOptions.q = searchQuery.value;
-  console.log(fetchOptions);
-  console.log(JSON.stringify(fetchOptions));
 
-  const getImages = () => axios.get(`${BASE_URL}`, fetchOptions);
+  const searchParams = new URLSearchParams({
+    _key: API_KEY,
+    _q: searchQuery.value,
+    _image_type: 'photo',
+    _orientation: 'horizontal',
+    _safesearch: true,
+    _page: 1,
+    _per_page: 40,
+  });
+
+  const searchUrl = `${BASE_URL}?${searchParams}`;
+  console.log(searchUrl);
+
+  const getImages = () => axios.get(searchUrl);
 
   getImages()
     .then(({ data }) => {
@@ -38,10 +40,21 @@ const handleSubmit = event => {
     })
     .catch(console.warn);
 
-  //   fetch(`https://pixabay.com/api/${JSON.stringify(fetchOptions)}`)
-  //     .then(response => response.json())
-  //     .then(images => console.log(images))
-  //     .catch(error => console.log(error));
+  // console.log(JSON.stringify(fetchOptions));
+
+  // const getImages = () => axios.get(`${BASE_URL}`, fetchOptions);
+
+  // getImages()
+  //   .then(({ data }) => {
+  //     console.log(data);
+  //   })
+  //   .catch(console.warn);
+
+  // fetch(searchUrl)
+  //   .then(({ data }) => {
+  //     console.log(data);
+  //   })
+  //   .catch(console.warn);
 };
 
 refs.form.addEventListener('submit', handleSubmit);
