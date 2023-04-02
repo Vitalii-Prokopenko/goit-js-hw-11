@@ -1,0 +1,31 @@
+/* GALLERY STYLES */
+.gallery {
+  margin: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: auto;
+  gap: 20px;
+}
+
+.photo-card {
+  //   height: 300px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+  }
+}
+
+.info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  &-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

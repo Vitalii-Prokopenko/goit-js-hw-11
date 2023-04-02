@@ -1,12 +1,43 @@
 import axios from 'axios';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { fetchImages } from './js/fetchimages';
+import { markupImageCard } from './js/create-image-cards';
 
-const refs = {
-  form: document.querySelector('.search-form'),
-  btn: document.querySelector('.btn'),
-};
+const form = document.querySelector('.search-form');
+const btnSubmit = document.querySelector('.btn');
+const gallery = document.querySelector('.gallery');
+const btnLoadMore = document.querySelector('.load-more');
+
+btnLoadMore.setAttribute('hidden', '');
+
+export { gallery, btnLoadMore };
 
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '30578820-1c894d3db344c99ef40fa5cf7';
+
+const searchParams = new URLSearchParams({
+  key: API_KEY,
+  q: '',
+  image_type: 'photo',
+  orientation: 'horizontal',
+  safesearch: true,
+  page: 1,
+  per_page: 40,
+});
+
+let searchUrl = '';
+let currentPage = 1;
+
+export { searchParams };
+export { currentPage };
+
+// Function expression to handle click on load more button
+
+const handleLoadMore = () => {
+  searchUrl = `${BASE_URL}?${searchParams}`;
+  console.log(searchUrl);
+  fetchImages(searchUrl);
+};
 
 // Function expression to handle submit user query
 
@@ -17,44 +48,16 @@ const handleSubmit = event => {
     elements: { searchQuery },
   } = event.currentTarget;
 
-  console.log(searchQuery.value);
+  gallery.innerHTML = '';
 
-  const searchParams = new URLSearchParams({
-    _key: API_KEY,
-    _q: searchQuery.value,
-    _image_type: 'photo',
-    _orientation: 'horizontal',
-    _safesearch: true,
-    _page: 1,
-    _per_page: 40,
-  });
+  searchParams.set('q', searchQuery.value);
 
-  const searchUrl = `${BASE_URL}?${searchParams}`;
+  searchUrl = `${BASE_URL}?${searchParams}`;
   console.log(searchUrl);
-
-  const getImages = () => axios.get(searchUrl);
-
-  getImages()
-    .then(({ data }) => {
-      console.log(data);
-    })
-    .catch(console.warn);
-
-  // console.log(JSON.stringify(fetchOptions));
-
-  // const getImages = () => axios.get(`${BASE_URL}`, fetchOptions);
-
-  // getImages()
-  //   .then(({ data }) => {
-  //     console.log(data);
-  //   })
-  //   .catch(console.warn);
-
-  // fetch(searchUrl)
-  //   .then(({ data }) => {
-  //     console.log(data);
-  //   })
-  //   .catch(console.warn);
+  fetchImages(searchUrl);
 };
 
-refs.form.addEventListener('submit', handleSubmit);
+form.addEventListener('submit', handleSubmit);
+btnLoadMore.addEventListener('click', handleLoadMore);
+
+// export { currentPage };
