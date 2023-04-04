@@ -12,6 +12,7 @@ export { gallery, btnLoadMore };
 
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '30578820-1c894d3db344c99ef40fa5cf7';
+const IMAGES_PER_PAGE = 40;
 
 const searchParams = new URLSearchParams({
   key: API_KEY,
@@ -20,7 +21,7 @@ const searchParams = new URLSearchParams({
   orientation: 'horizontal',
   safesearch: true,
   page: 1,
-  per_page: 20,
+  per_page: IMAGES_PER_PAGE,
 });
 
 let searchUrl = '';
@@ -54,7 +55,7 @@ const handleSubmit = event => {
   getFirstPageOfImages()
     .then(({ data }) => {
       const numberOfImages = data.totalHits;
-      numberOfPages = Math.ceil(numberOfImages / 20);
+      numberOfPages = Math.ceil(numberOfImages / IMAGES_PER_PAGE);
       arrayOfImages = data.hits;
       renderImages(numberOfPages, arrayOfImages);
     })

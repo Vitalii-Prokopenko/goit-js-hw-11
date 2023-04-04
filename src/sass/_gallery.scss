@@ -30,3 +30,24 @@
     align-items: center;
   }
 }
+
+.load-more {
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 120px;
+  height: 40px;
+
+  background-color: lightsalmon;
+  color: crimson;
+  border: 1px solid crimson;
+  border-radius: 10%;
+
+  &:hover,
+  &:focus {
+    background-color: salmon;
+    color: white;
+  }
+}
