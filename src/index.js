@@ -1,10 +1,8 @@
 import axios from 'axios';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { fetchImages } from './js/fetchimages';
-import { markupImageCard } from './js/create-image-cards';
+import { renderImages } from './js/renderimages';
 
 const form = document.querySelector('.search-form');
-const btnSubmit = document.querySelector('.btn');
 const gallery = document.querySelector('.gallery');
 const btnLoadMore = document.querySelector('.load-more');
 
@@ -22,7 +20,7 @@ const searchParams = new URLSearchParams({
   orientation: 'horizontal',
   safesearch: true,
   page: 1,
-  per_page: 40,
+  per_page: 20,
 });
 
 let searchUrl = '';
@@ -50,19 +48,15 @@ const handleSubmit = event => {
   searchParams.set('page', currentPage);
 
   searchUrl = `${BASE_URL}?${searchParams}`;
-  console.log(searchUrl);
 
   const getFirstPageOfImages = () => axios.get(searchUrl);
 
   getFirstPageOfImages()
     .then(({ data }) => {
-      console.log(data);
       const numberOfImages = data.totalHits;
-      numberOfPages = Math.ceil(numberOfImages / 40);
-      console.log(numberOfImages);
-      console.log(numberOfPages);
+      numberOfPages = Math.ceil(numberOfImages / 20);
       arrayOfImages = data.hits;
-      fetchImages(numberOfPages, arrayOfImages);
+      renderImages(numberOfPages, arrayOfImages);
     })
     .catch(console.warn);
 };
@@ -74,20 +68,21 @@ const handleLoadMore = () => {
   searchParams.set('page', currentPage);
 
   searchUrl = `${BASE_URL}?${searchParams}`;
-  console.log(searchUrl);
 
   const getNextPageOfImages = () => axios.get(searchUrl);
   getNextPageOfImages()
     .then(({ data }) => {
-      console.log(data);
-
       arrayOfImages = data.hits;
-      fetchImages(numberOfPages, arrayOfImages);
+      renderImages(numberOfPages, arrayOfImages);
+      if (currentPage === numberOfPages) {
+        btnLoadMore.setAttribute('hidden', '');
+        Notify.info(
+          `We're sorry, but you've reached the end of search results.`
+        );
+      }
     })
     .catch(console.warn);
 };
 
 form.addEventListener('submit', handleSubmit);
-
-console.log(currentPage);
 btnLoadMore.addEventListener('click', handleLoadMore);
