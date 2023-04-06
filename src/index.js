@@ -38,13 +38,11 @@ const handleSubmit = event => {
     elements: { searchQuery },
   } = event.currentTarget;
 
-  const searchQueryCleared = searchQuery.value.trim();
-
   btnLoadMore.style.display = 'none';
   gallery.innerHTML = '';
 
   currentPage = 1;
-  searchParams.set('q', searchQueryCleared);
+  searchParams.set('q', searchQuery.value.trim());
   searchParams.set('page', currentPage);
 
   searchUrl = `${BASE_URL}?${searchParams}`;
