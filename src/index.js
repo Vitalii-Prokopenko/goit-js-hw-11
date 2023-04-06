@@ -38,7 +38,7 @@ const handleSubmit = event => {
     elements: { searchQuery },
   } = event.currentTarget;
 
-  searchQueryCleared = searchQuery.value.trim();
+  const searchQueryCleared = searchQuery.value.trim();
 
   btnLoadMore.style.display = 'none';
   gallery.innerHTML = '';
@@ -48,7 +48,7 @@ const handleSubmit = event => {
   searchParams.set('page', currentPage);
 
   searchUrl = `${BASE_URL}?${searchParams}`;
-  console.log(searchUrl);
+
   const getFirstPageOfImages = () => axios.get(searchUrl);
 
   getFirstPageOfImages()
