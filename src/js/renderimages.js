@@ -16,6 +16,6 @@ export const renderImages = (numberOfPages, array) => {
       break;
     default:
       markupImageCard(array);
-      btnLoadMore.removeAttribute('hidden');
+      btnLoadMore.style.display = 'flex';
   }
 };

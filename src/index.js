@@ -6,8 +6,6 @@ const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
 const btnLoadMore = document.querySelector('.load-more');
 
-btnLoadMore.setAttribute('hidden', '');
-
 export { gallery, btnLoadMore };
 
 const BASE_URL = 'https://pixabay.com/api/';
@@ -29,7 +27,6 @@ let currentPage = 1;
 let numberOfPages = 0;
 let arrayOfImages = {};
 
-export { searchParams };
 export { currentPage };
 
 // Function expression to handle submit user query
@@ -41,15 +38,17 @@ const handleSubmit = event => {
     elements: { searchQuery },
   } = event.currentTarget;
 
-  btnLoadMore.setAttribute('hidden', '');
+  searchQueryCleared = searchQuery.value.trim();
+
+  btnLoadMore.style.display = 'none';
   gallery.innerHTML = '';
 
   currentPage = 1;
-  searchParams.set('q', searchQuery.value);
+  searchParams.set('q', searchQueryCleared);
   searchParams.set('page', currentPage);
 
   searchUrl = `${BASE_URL}?${searchParams}`;
-
+  console.log(searchUrl);
   const getFirstPageOfImages = () => axios.get(searchUrl);
 
   getFirstPageOfImages()
@@ -76,7 +75,7 @@ const handleLoadMore = () => {
       arrayOfImages = data.hits;
       renderImages(numberOfPages, arrayOfImages);
       if (currentPage === numberOfPages) {
-        btnLoadMore.setAttribute('hidden', '');
+        btnLoadMore.style.display = 'none';
         Notify.info(
           `We're sorry, but you've reached the end of search results.`
         );
